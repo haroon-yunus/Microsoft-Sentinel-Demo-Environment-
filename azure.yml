@@ -1,0 +1,19 @@
+steps:
+  - checkout: self   # makes sure repo is pulled
+
+  - task: TerraformInstaller@1
+    inputs:
+      terraformVersion: '1.5.7'
+
+  # change 'terraform' to the actual folder name where your .tf files live
+  - script: terraform init
+    workingDirectory: '$(Build.SourcesDirectory)/terraform'
+    displayName: 'Terraform Init'
+
+  - script: terraform plan -out=tfplan
+    workingDirectory: '$(Build.SourcesDirectory)/terraform'
+    displayName: 'Terraform Plan'
+
+  - script: terraform apply -auto-approve tfplan
+    workingDirectory: '$(Build.SourcesDirectory)/terraform'
+    displayName: 'Terraform Apply'
